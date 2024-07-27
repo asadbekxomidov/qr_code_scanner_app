@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code_app/views/screens/generated/generated_screen.dart';
 import 'package:qr_code_app/views/screens/home_screen.dart';
@@ -32,7 +32,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final scanHistory = await _loadScanHistory();
     scanHistory.removeAt(index);
     await prefs.setStringList('scanHistory', scanHistory);
-    setState(() {});
+    setState(() {
+      _scanHistoryFuture = _loadScanHistory();
+    });
   }
 
   @override
@@ -167,55 +169,67 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     width: 30,
                                   ),
                                   SizedBox(width: 20),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            code,
-                                            style: GoogleFonts.itim(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                code,
+                                                style: GoogleFonts.itim(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(width: 50),
-                                          InkWell(
-                                            onTap: () => _deleteScanData(index),
-                                            child: SvgPicture.asset(
-                                                'assets/images/delete_image.svg'),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Data',
-                                            style: GoogleFonts.itim(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white,
+                                            SizedBox(width: 60),
+                                            InkWell(
+                                              onTap: () {
+                                                _deleteScanData(index);
+                                              },
+                                              child: SvgPicture.asset(
+                                                  'assets/images/delete_image.svg',
+                                                  height: 30,
+                                                  width: 30),
                                             ),
-                                          ),
-                                          SizedBox(width: 110),
-                                          Text(
-                                            timestamp,
-                                            style: GoogleFonts.itim(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white,
+                                            SizedBox(width: 20),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Data',
+                                              style: GoogleFonts.itim(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            Spacer(),
+                                            Text(
+                                              timestamp,
+                                              style: GoogleFonts.itim(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            SizedBox(width: 20),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -253,10 +267,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (ctx) => GeneratedScreen()),
-                      // );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (ctx) => GeneratedScreen()),
+                      );
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
