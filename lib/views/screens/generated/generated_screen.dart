@@ -210,9 +210,7 @@ class GeneratedScreen extends StatelessWidget {
 
   Widget _buildGridItem(String title, String assetPath, BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Handle grid item tap
-      },
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
